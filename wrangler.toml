@@ -1,0 +1,21 @@
+name = "chitchatter"
+compatibility_date = "2024-09-04"
+
+# Environment variables can be set in the Cloudflare Pages dashboard
+# or using the wrangler CLI:
+# wrangler pages secret put RTC_CONFIG --env production
+# wrangler pages secret put CORS_ALLOW_ALL --env production
+
+# Build configuration for Pages (optional - can be set in dashboard)
+[build]
+command = "npm run build"
+cwd = ""
+
+# Note: Cloudflare Pages Functions are automatically detected in the functions/ directory
+# No additional configuration needed for the /api/get-config endpoint
+
+# Optional: Custom domain configuration
+# [env.production]
+# routes = [
+#   { pattern = "chat.tionis.dev", custom_domain = true }
+# ]

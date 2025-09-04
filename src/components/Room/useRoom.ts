@@ -93,7 +93,7 @@ export function useRoom(
   } = useContext(ShellContext)
 
   const messageLog = isDirectMessageRoom
-    ? (shellMessageLog.directMessageLog[targetPeerId] ?? [])
+    ? shellMessageLog.directMessageLog[targetPeerId] ?? []
     : shellMessageLog.groupMessageLog
 
   const [peerRoom] = useState(

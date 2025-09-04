@@ -388,6 +388,72 @@ const config = () => {
 
 When hosted on GitHub Pages and the configuration above has been done, the Production environment is updated when the remote `main` branch is updated (once GitHub Actions are enabled).
 
+##### On Cloudflare Pages
+
+Chitchatter now supports deployment on Cloudflare Pages with full support for the Enhanced Connectivity API endpoint.
+
+**Prerequisites:**
+
+1. A Cloudflare account
+2. Optional: [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/install-and-update/) installed globally: `npm install -g wrangler`
+
+**Setup Instructions:**
+
+1. **Connect your GitHub repository to Cloudflare Pages:**
+
+   - Log into the [Cloudflare dashboard](https://dash.cloudflare.com/)
+   - Go to "Pages" and click "Create a project"
+   - Connect your GitHub account and select your Chitchatter repository
+   - Use these build settings:
+     - **Framework preset**: None (or Custom)
+     - **Build command**: `npm run build`
+     - **Build output directory**: `dist`
+     - **Root directory**: `/` (leave empty)
+
+2. **Configure environment variables** (for Enhanced Connectivity):
+
+   - In your Cloudflare Pages project dashboard, go to "Settings" > "Environment variables"
+   - Add these variables as needed:
+     - `RTC_CONFIG`: Base64-encoded JSON string with your TURN server configuration (use `npm run generate-rtc-config` to generate this)
+     - `CORS_ALLOW_ALL`: Set to `"true"` for debugging only (INSECURE - do not use in production)
+
+3. **Deploy:**
+   - Push changes to your connected branch (usually `main` or `develop`)
+   - Cloudflare Pages will automatically build and deploy your site
+   - The Enhanced Connectivity API will be available at `https://your-site.pages.dev/api/get-config`
+
+**Local Development with Cloudflare Pages:**
+
+If you have Wrangler installed, you can test the Cloudflare Pages function locally:
+
+```bash
+# Install dependencies (if not already installed)
+npm install
+
+# Start local development with Cloudflare Pages Functions
+npx wrangler pages dev dist --port 3000
+
+# Or build first, then serve
+npm run build
+npx wrangler pages dev dist --port 3000
+```
+
+**Configuration Files:**
+
+The project includes a `wrangler.toml` configuration file for Cloudflare Pages. You can customize this file for your specific deployment needs.
+
+**Environment Variable Management:**
+
+You can also manage environment variables using Wrangler CLI:
+
+```bash
+# Set production environment variables
+npx wrangler pages secret put RTC_CONFIG --env production
+
+# Set preview environment variables
+npx wrangler pages secret put RTC_CONFIG --env preview
+```
+
 ##### On non-GitHub hosts
 
 Build the app with `npm run build`, and then serve the `dist` directory. Any static file serving solution should work provided it is using a [secure context](https://developer.mozilla.org/en-US/docs/Web/Security/Secure_Contexts).

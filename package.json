@@ -57,8 +57,10 @@
     "start:tracker": "bittorrent-tracker",
     "start:streamsaver": "serve -p 3015 node_modules/streamsaver",
     "start:api": "VERCEL_TOKEN=\"$(jq .token ~/.local/share/com.vercel.cli/auth.json)\" npx vercel dev --token=\"$VERCEL_TOKEN\" --listen=127.0.0.1:3001 --yes",
+    "start:cloudflare": "npm run build && npx wrangler pages dev dist --port 3001",
     "start:e2e": "node simple-api-server.js & npm run start:tracker & cross-env VITE_HOMEPAGE=$(npm pkg get homepage) VITE_IS_E2E_TEST=true VITE_RTC_CONFIG_ENDPOINT=/api/get-config VITE_TRACKER_URL=\"ws://localhost:8000\" vite --port 3000 --logLevel error",
     "dev": "mprocs \"npx cross-env VITE_TRACKER_URL=\"ws://localhost:8000\" VITE_STREAMSAVER_URL=\"http://localhost:3015/mitm.html\" npm run start\" \"npm run start:tracker\" \"npm run start:streamsaver\" \"npm run start:api\"",
+    "dev:cloudflare": "mprocs \"npx cross-env VITE_TRACKER_URL=\"ws://localhost:8000\" VITE_STREAMSAVER_URL=\"http://localhost:3015/mitm.html\" npm run start\" \"npm run start:tracker\" \"npm run start:streamsaver\" \"npm run start:cloudflare\"",
     "build": "npm run build:app && npm run build:sdk",
     "build:app": "cross-env VITE_HOMEPAGE=$(npm pkg get homepage) vite build",
     "build:sdk": "cross-env VITE_HOMEPAGE=$(npm pkg get homepage) parcel build sdk/sdk.ts --no-content-hash",
@@ -144,7 +146,8 @@
     "vite-plugin-node-polyfills": "^0.23.0",
     "vite-plugin-pwa": "^0.21.2",
     "vite-plugin-svgr": "^4.3.0",
-    "vitest": "^3.0.9"
+    "vitest": "^3.0.9",
+    "wrangler": "^3.0.0"
   },
   "overrides": {
     "ipfs-core": "npm:dry-uninstall",
